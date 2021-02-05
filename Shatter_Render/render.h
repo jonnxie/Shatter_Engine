@@ -20,7 +20,7 @@
 #include "../Shatter_Model/shatter_model_include.h"
 #include "../Shatter_App/shatter_app_include.h"
 #include "../Shatter_Item/shatter_item.h"
-
+#include "../Shatter_Input/shatter_input_include.h"
 
 //#ifdef NDEBUG
 //const bool enableValidationLayers = false;
@@ -93,6 +93,8 @@ namespace shatter{
 
             void Recreate_SwapChain();
 
+            void Key_Event_Callback(int key, int action);
+
             void Cleanup_SwapChain();
 
             void Draw();
@@ -130,6 +132,7 @@ namespace shatter{
             VkDevice* Get_Device(){return &device;};
             //        void Register_Command(cm command);
             void Add_Drawable(drawable::Shatter_Drawable* drawable);
+            void Add_Input(input::Shatter_Input* input);
             void Create_Command_Buffer();
             GLFWwindow* Get_Window(){return window;};
         public:
@@ -143,11 +146,12 @@ namespace shatter{
 
         public:
             static void onWindowResized(GLFWwindow *window, int width, int height);
-
+            static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
         private:
             //        std::shared_ptr<app::Shatter_App> app;
 //            std::vector<cm> cm_vec;
             std::vector<drawable::Shatter_Drawable*> drawable_vec;
+            std::vector<input::Shatter_Input*> input_vec;
             GLFWwindow *window;
 
             VkInstance instance;

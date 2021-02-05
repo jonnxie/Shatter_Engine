@@ -118,6 +118,8 @@ namespace shatter::render{
 
         //注册回调函数
         glfwSetWindowSizeCallback(window, onWindowResized);
+
+        glfwSetKeyCallback(window, key_callback);
     }
 
     void base_render::Init_Vulkan(){
@@ -584,6 +586,12 @@ namespace shatter::render{
         Create_Framebuffers();
         Create_GraphicsCommandBuffers();
     }
+    void base_render::Key_Event_Callback(int key, int action){
+        for(auto& obj : input_vec){
+            obj->key_event_callback(key,action);
+        }
+    }
+
     void base_render::Cleanup_SwapChain(){
         vkDestroyImageView(device, depthImageView, nullptr);
         vkDestroyImage(device, depthImage, nullptr);
@@ -889,6 +897,13 @@ namespace shatter::render{
         app->Recreate_SwapChain();
     }
 
+    void base_render::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
+        if(action == GLFW_PRESS){
+            auto *app = reinterpret_cast<base_render *>(glfwGetWindowUserPointer(window));
+            app->Key_Event_Callback(key,action);
+        }
+    }
+
     void base_render::AllocateDescriptorSets(const std::vector<VkDescriptorSetLayout>& des_set_layout,
                                 VkDescriptorSet* set){
         VkDescriptorSetAllocateInfo allocInfo = {};
@@ -908,6 +923,9 @@ namespace shatter::render{
 
     void base_render::Add_Drawable(drawable::Shatter_Drawable* drawable){
         drawable_vec.emplace_back(drawable);
+    }
+    void base_render::Add_Input(input::Shatter_Input* input){
+        input_vec.emplace_back(input);
     }
     void base_render::Create_Command_Buffer(){
         Create_GraphicsCommandBuffers();
