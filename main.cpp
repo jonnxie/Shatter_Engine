@@ -21,6 +21,7 @@ int main() {
      cp_vec
      ));
     render.Add_Drawable((*app.Get_Drawable_Vec())[0]);
+    render.Add_Input(dynamic_cast<shatter::input::Shatter_Input*>((*app.Get_Drawable_Vec())[0]));
     render.Create_Command_Buffer();
     try {
         app.Loop();
