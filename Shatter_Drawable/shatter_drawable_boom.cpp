@@ -192,9 +192,9 @@ namespace shatter::drawable{
                 std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - startTime).count() / 1000.0f;
 
         ubo.model = m_matrix;
-        ubo.view = glm::lookAt(glm::vec3( 2.0f,
-                                         2.0f,
-                                         2.0f), glm::vec3(0.0f, 0.0f, 0.0f),
+        ubo.view = glm::lookAt(glm::vec3( 4 * std::cos(alpha) * std::cos(gamma),
+                                         4 * std::cos(alpha) * std::sin(gamma),
+                                         4 * std::sin(alpha)), glm::vec3(0.0f, 0.0f, 0.0f),
                                glm::vec3(0.0f, 0.0f, 1.0f));
         ubo.proj = glm::perspective(glm::radians(45.0f),
                                     render::base_render::Get_Render().Get_Extent2D().width /
@@ -263,7 +263,19 @@ namespace shatter::drawable{
         vkCmdPipelineBarrier(cb, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 0, 0, nullptr, 0, nullptr, 0, nullptr);
 
     }
-
+    void Shatter_Drawable_Boom::key_event_callback(int key, int action){
+        if(action == GLFW_PRESS){
+            if(key == GLFW_KEY_UP){
+                alpha++;
+            }else if(key == GLFW_KEY_DOWN){
+                alpha--;
+            }else if(key == GLFW_KEY_LEFT){
+                gamma++;
+            }else if(key == GLFW_KEY_RIGHT){
+                gamma--;
+            }
+        }
+    }
 
 }
 
